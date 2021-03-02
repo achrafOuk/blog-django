@@ -1,6 +1,6 @@
 body {
-    background: #f7f7ff url() repeat fixed top left;
-    background-color: #f7f7ff;
+    background: #fff url() repeat fixed top left;
+    background-color: #fff;
     font-family: 'Open Sans',sans-serif;
     font-size: 14px;
     font-weight: 400;
@@ -8,4 +8,15 @@ body {
     word-wrap: break-word;
     margin: 0;
     padding: 0;
+}
+
+.content-section {
+  background: #ffffff;
+  padding: 10px 20px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  margin-bottom: 20px;
+}
+main {
+    margin-top: 3% !important;
 }
