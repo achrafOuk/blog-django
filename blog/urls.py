@@ -20,6 +20,8 @@ from blog_app import  views
 urlpatterns = [
 path('', views.index, name='home'),
 path('about/', views.about,name='about'),
+path('post/<int:post_id>', views.blog,name='blog'),
+path('post/new/', views.NewBlog.as_view(),name='new_blog'),
 path('contact/', views.about,name='contact'),
  path('admin/', admin.site.urls,name='home'),
 ]

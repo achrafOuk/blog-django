@@ -1,26 +1,19 @@
 from django.shortcuts import render
-
+from .models import Posts
 # Create your views here.
-
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView
+)
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 
 
 def index(request):
-    posts = [
-        {
-            'author': 'CoreyMS',
-            'title': 'Blog Post 1',
-            'content': 'First post content',
-            'date_posted': 'August 27, 2018'
-        },
-        {
-            'author': 'Jane Doe',
-            'title': 'Blog Post 2',
-            'content': 'Second post content',
-            'date_posted': 'August 28, 2018'
-        }
-    ]
+    posts = Posts.objects.all()  
     index = render_to_string('index.html', {'title': 'APP', 'user': request.user,'posts':posts})
     return HttpResponse(index)
 
@@ -29,3 +22,11 @@ def about(request):
 
 def contact(request):
     return render(request,"contact.html")
+def blog(request,post_id):
+    post = Posts.objects.get(post_id=post_id)  
+    blog = render_to_string('blog.html', {'title': 'APP', 'user': request.user,'post':post})
+    return HttpResponse(blog)
+class NewBlog(CreateView):
+    model=Posts
+    template_name ="manage/new_blog.html"
+    fields = ['title', 'content']
