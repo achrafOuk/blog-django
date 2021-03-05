@@ -26,5 +26,14 @@ path('post/new/', views.NewBlog.as_view(),name='new_blog'),
 path('contact/', views.about,name='contact'),
  path('admin/', admin.site.urls,name='home'),
 path('login/', auth_views.LoginView.as_view(template_name='author/login.html'), name='login'),
-path('logout/', auth_views.LogoutView.as_view(template_name='index.html'), name='login'),
+path('logout/', auth_views.LogoutView.as_view(template_name='index.html'), name='logout'),
 ]
+from django.conf import settings
+from django.conf.urls.static import static
+
+"""urlpatterns = [
+    # ... the rest of your URLconf goes here ...
+    
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)"""
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

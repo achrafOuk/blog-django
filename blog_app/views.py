@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.shortcuts import render
@@ -11,6 +12,7 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 from .PostForm import PostForm
 from django.contrib.auth.models import User
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 def index(request):
     posts = Posts.objects.all()  
     index = render_to_string('index.html', {'title': 'APP', 'user': request.user,'posts':posts})
@@ -24,11 +26,17 @@ def contact(request):
 def blog(request,post_id):
     post = Posts.objects.get(post_id=post_id)  
     author = User.objects.get(id=int(post.author_id))
-    blog = render_to_string('blog.html', {'title': 'APP','author':str(author.username), 'user': request.user,'post':post})
+    views_number = post.views+1
+    Posts.objects.filter(post_id=post_id).update(views=views_number)
+    post_title  = post.title
+    blog = render_to_string('blog.html', {'img':author.profile.image.url,'title': post_title,'author':str(author.username), 'user': request.user,'post':post})
     return HttpResponse(blog)
-class NewBlog(CreateView):
+
+#@login_required
+class NewBlog(LoginRequiredMixin,CreateView):
     model=Posts
     form_class =PostForm
     template_name ="manage/new_blog.html"
-    #fields = ['title', 'content']
-    #redirect('home')
+    def form_valid(self, form):
+            form.instance.author = self.request.user
+            return super().form_valid(form)
