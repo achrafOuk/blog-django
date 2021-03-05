@@ -7,4 +7,5 @@ card-title a {
 }
 h2.card-title a:hover {
   color: #0d6efd;
+  text-decoration: none;
 }

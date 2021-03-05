@@ -9,5 +9,18 @@
     </div>
     <p class="article-content">{{ post.content }}</p>
   </div>
+  <div id="author-info">
+    <div id="author-name">{{author}}</div>
+    <div id="author-desc">random text about the author</div>
+  </div>
 </article>
+<style>
+  article.media.content-section {
+    display: flow-root;
+  }
+  #author-name {
+    color: #343a40;
+    font-weight: bold;
+  }
+</style>
 {% endblock %}

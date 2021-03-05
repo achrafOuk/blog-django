@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.http import HttpResponse
 from blog_app import  views
+from django.contrib.auth import views as auth_views
 urlpatterns = [
 path('', views.index, name='home'),
 path('about/', views.about,name='about'),
@@ -24,4 +25,6 @@ path('post/<int:post_id>', views.blog,name='post'),
 path('post/new/', views.NewBlog.as_view(),name='new_blog'),
 path('contact/', views.about,name='contact'),
  path('admin/', admin.site.urls,name='home'),
+path('login/', auth_views.LoginView.as_view(template_name='author/login.html'), name='login'),
+path('logout/', auth_views.LogoutView.as_view(template_name='index.html'), name='login'),
 ]
