@@ -7,7 +7,7 @@
         writer:{{ post.author }} on {{ post.date_posted |date:"F d Y" }}
       </p>
     </div>
-    <p class="article-content">{{ post.content }}</p>
+    <p class="article-content">{{ post.content |safe }}</p>
   </div>
   <div id="author-info">
     <img src="{{img}}" />
