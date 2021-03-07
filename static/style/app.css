@@ -23,9 +23,9 @@ main {
   margin-top: 3% !important;
   margin-bottom: 3% !important;
 }
-@media (min-height: 992px) {
-  main {
-    height: 80vh;
+@media (min-height: 789px) and (max-height: 900px) {
+  main.container {
+    padding-bottom: 4%;
   }
 }
 footer {

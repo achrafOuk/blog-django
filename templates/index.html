@@ -14,7 +14,7 @@
         <h2 class="card-title">
           <a href="{% url 'post' post.post_id %}">{{post.title}}</a>
         </h2>
-        <p class="card-text">{{post.content}}</p>
+        <p class="card-text">{{post.content|safe}}</p>
         <a href="{% url 'post' post.post_id %}" class="btn btn-primary"
           >Read More &rarr;</a
         >
