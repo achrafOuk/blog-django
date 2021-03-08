@@ -20,7 +20,7 @@ class Profile(models.Model):
             img.save(self.image.path)
 class Categories(models.Model):
     categorie_id = models.AutoField(primary_key=True)
-    categorie_name = models.CharField(max_length=220,blank=False, null=False,default="None")
+    categorie_name = models.CharField(max_length=220,blank=True, null=True,default="None")
     class Meta:
             db_table = 'categorie'
 
@@ -33,7 +33,7 @@ class Posts(models.Model):
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     views =models.IntegerField(default=0)
     categorie = models.ForeignKey(Categories, on_delete=models.SET_NULL, null=True)
-    keywords=models.CharField(max_length=220,blank=False, null=True)
+    keywords=models.CharField(max_length=220,blank=True, null=True)
     class Meta:
             db_table = 'posts'
     def get_absolute_url(self):
