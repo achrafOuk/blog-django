@@ -10,7 +10,6 @@ from django.views.generic import (
 )
 from django.http import HttpResponse
 from django.template.loader import render_to_string
-from .PostForm import PostForm
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Categories
