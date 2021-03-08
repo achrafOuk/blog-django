@@ -23,8 +23,9 @@ class Categories(models.Model):
     categorie_name = models.CharField(max_length=220,blank=False, null=False,default="None",unique=False)
     class Meta:
             db_table = 'categorie'
+    def __str__(self):
+        return categorie_name
     def get_absolute_url(self):
-        #return reverse("home", kwargs={"categorie_id": self.categorie_id})
         return reverse("home")
 
 class Posts(models.Model):
