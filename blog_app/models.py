@@ -24,7 +24,7 @@ class Categories(models.Model):
     class Meta:
             db_table = 'categorie'
     def __str__(self):
-        return categorie_name
+        return self.categorie_name
     def get_absolute_url(self):
         return reverse("home")
 
