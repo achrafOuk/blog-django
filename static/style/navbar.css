@@ -1,0 +1,8 @@
+.navbar {
+  background-color: #343a40 !important;
+  padding-left: 2%;
+}
+.navbar a {
+  color: #fff !important;
+  font-weight: bold;
+}

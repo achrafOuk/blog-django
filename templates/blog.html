@@ -1,0 +1,45 @@
+{% extends "base.html"%} {% block content %}
+<article class="media content-section">
+  <div class="media-body">
+    <h2 class="post_title">{{post.title}}</h2>
+    <div class="article-metadata">
+      <p class="mr-2" href="#">
+        writer:{{ post.author }} on {{ post.date_posted |date:"F d Y" }}
+      </p>
+    </div>
+    <p class="article-content">{{ post.content |safe }}</p>
+  </div>
+  <div id="author-info">
+    <img src="{{img}}" />
+    <div id="author-bio">
+      <div id="author-name">{{author}}</div>
+      <div id="author-desc">random text about the author</div>
+    </div>
+  </div>
+  <div id="comments">0 comments</div>
+</article>
+<style>
+  article.media.content-section {
+    display: flow-root;
+  }
+  #author-name {
+    color: #343a40;
+    font-weight: bold;
+  }
+  div#author-info {
+    display: flex;
+  }
+  div#author-info {
+    display: flex;
+    margin-bottom: 2%;
+    width: 100%;
+    padding: 1%;
+  }
+  div#author-info img {
+    margin-right: 2%;
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+  }
+</style>
+{% endblock %}

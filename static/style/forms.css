@@ -1,0 +1,8 @@
+textarea {
+  resize: none !important;
+}
+
+input,
+textarea {
+  width: 100%;
+}
