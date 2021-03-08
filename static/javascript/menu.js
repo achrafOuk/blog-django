@@ -10,5 +10,19 @@ function display() {
 document
   .getElementsByClassName("navbar-toggler")[1]
   .addEventListener("click", function () {
-    display();
+    display("navbar-collapse collapse", 1);
+  });
+function displayMenu() {
+  let toggle = document.getElementsByClassName("dropdown-menu")[0].style
+    .display;
+  document.getElementsByClassName("dropdown-menu")[0].style.display =
+    document.getElementsByClassName("dropdown-menu")[0].style.display ===
+    "block"
+      ? "none"
+      : "block";
+}
+document
+  .getElementsByClassName("dropdown-toggle")[0]
+  .addEventListener("click", function () {
+    displayMenu();
   });

@@ -10,6 +10,7 @@ from django.views.generic import (
 )
 from django.http import HttpResponse
 from django.template.loader import render_to_string
+from .PostForm import PostForm
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Categories
@@ -35,7 +36,6 @@ def blog(request,post_id):
 #@login_required
 class NewBlog(LoginRequiredMixin,CreateView):
     model=Posts
-    #form_class = PostForm
     fields = ['title', 'content', 'keywords', 'categorie']
     template_name ="manage/new_blog.html"
     def form_valid(self, form):
@@ -43,9 +43,8 @@ class NewBlog(LoginRequiredMixin,CreateView):
             return super().form_valid(form)
 class NewCategorie(LoginRequiredMixin,CreateView):
     model=Categories
-    #form_class = PostForm
     fields = ['categorie_name']
-    template_name ="manage/new_blog.html"
+    template_name ="manage/new_categorie.html"
     def form_valid(self, form):
             form.instance.author = self.request.user
             return super().form_valid(form)
