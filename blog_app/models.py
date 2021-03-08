@@ -20,7 +20,7 @@ class Profile(models.Model):
             img.save(self.image.path)
 class Categories(models.Model):
     categorie_id = models.AutoField(primary_key=True)
-    categorie_name = models.CharField(max_length=220,blank=True, null=True,default="None")
+    categorie_name = models.CharField(max_length=220,default="None")
     class Meta:
             db_table = 'categorie'
 
