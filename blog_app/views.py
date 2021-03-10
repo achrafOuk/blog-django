@@ -33,10 +33,14 @@ def blog(request,post_id):
     blog = render_to_string('blog.html', {'img':author.profile.image.url,'title': post_title,'author':str(author.username), 'user': request.user,'post':post})
     return HttpResponse(blog)
 
-#@login_required
+def search_blog(request,search_word):
+    #posts = Posts.objects.raw(f"select * from posts where title like '%{search_word}%'").order_by('-date_posted')   
+    posts = Posts.objects.raw(f"SELECT * FROM `posts` WHERE title like '%%{search_word}%%'")
+    index = render_to_string('index.html', {'title': 'APP', 'user': request.user,'posts':posts})
+    return HttpResponse(index)
+
 class NewBlog(LoginRequiredMixin,CreateView):
     model=Posts
-    #form_class = PostForm
     fields = ['title', 'content', 'keywords', 'categorie']
     template_name ="manage/new_blog.html"
     def form_valid(self, form):
@@ -44,9 +48,8 @@ class NewBlog(LoginRequiredMixin,CreateView):
             return super().form_valid(form)
 class NewCategorie(LoginRequiredMixin,CreateView):
     model=Categories
-    #form_class = PostForm
     fields = ['categorie_name']
-    template_name ="manage/new_blog.html"
+    template_name ="manage/new_categorie.html"
     def form_valid(self, form):
             form.instance.author = self.request.user
             return super().form_valid(form)

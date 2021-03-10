@@ -12,6 +12,10 @@ body {
 body a {
   text-decoration: none;
 }
+a.dropdown-item {
+  color: #343a40 !important;
+  font-weight: bold;
+}
 .content-section {
   background: #ffffff;
   padding: 10px 20px;

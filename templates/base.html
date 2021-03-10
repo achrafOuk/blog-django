@@ -45,6 +45,17 @@
             <a class="nav-link" href="#">Contact</a>
           </li >
           {% if user.is_authenticated %}
+<li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Admin panel
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="{% url 'new_blog' %}">Add new post</a>
+          <a class="dropdown-item" href="#">Edit posts</a>
+          <a class="dropdown-item">Edit profile</a>
+          <a class="dropdown-item" href="{% url 'new_categorie' %}">Add new categorie</a>
+        </div>
+      </li>
           <li class="nav-item">
             <p class="nav-link" href="#">username:{{user.username}}</p>
           </li>
@@ -141,6 +152,7 @@
     <!-- /.container -->
   </footer>
 <script src="{% static 'javascript/menu.js' %}"></script>
+<script src="{% static 'javascript/form-style.js' %}"></script>
 {% block js %}
 {% endblock js%}
 </body>

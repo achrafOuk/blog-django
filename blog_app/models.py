@@ -20,9 +20,14 @@ class Profile(models.Model):
             img.save(self.image.path)
 class Categories(models.Model):
     categorie_id = models.AutoField(primary_key=True)
-    categorie_name = models.CharField(max_length=220,blank=False, null=False,default="None")
+    categorie_name = models.CharField(max_length=220,blank=False, null=False,default="None",unique=True)
+    def __str__(self):
+        return self.categorie_name
     class Meta:
             db_table = 'categorie'
+    def get_absolute_url(self):
+        #return reverse("home", kwargs={"categorie_id": self.categorie_id})
+        return reverse("home")
 
 class Posts(models.Model):
     post_id = models.AutoField(primary_key=True)
