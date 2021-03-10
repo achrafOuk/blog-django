@@ -33,10 +33,11 @@ def blog(request,post_id):
     blog = render_to_string('blog.html', {'img':author.profile.image.url,'title': post_title,'author':str(author.username), 'user': request.user,'post':post})
     return HttpResponse(blog)
 
-def search_blog(request,search_word):
+def search(request):
     #posts = Posts.objects.raw(f"select * from posts where title like '%{search_word}%'").order_by('-date_posted')   
+    search_word = request.GET['fsearch']
     posts = Posts.objects.raw(f"SELECT * FROM `posts` WHERE title like '%%{search_word}%%'")
-    index = render_to_string('index.html', {'title': 'APP', 'user': request.user,'posts':posts})
+    index = render_to_string('index.html', {"search_word":search_word,'title': 'APP', 'user': request.user,'posts':posts})
     return HttpResponse(index)
 
 class NewBlog(LoginRequiredMixin,CreateView):

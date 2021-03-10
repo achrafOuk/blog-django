@@ -21,7 +21,7 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
 path('', views.index, name='home'),
 path('about/', views.about,name='about'),
-path('search=<str:search_word>', views.search_blog,name='search'),
+path('search', views.search,name='search'),
 path('post/<int:post_id>', views.blog,name='post'),
 path('post/new/', views.NewBlog.as_view(),name='new_blog'),
 path('categorie/new/', views.NewCategorie.as_view(),name='new_categorie'),
