@@ -32,6 +32,12 @@ main {
     padding-bottom: 4%;
   }
 }
+.card-body img {
+  width: 100% !important;
+  height: 300px !important;
+  max-height: 300px !important;
+  margin-bottom: 2%;
+}
 footer {
   display: block;
   width: 100%;
