@@ -6,3 +6,8 @@
   color: #fff !important;
   font-weight: bold;
 }
+#navbarDropdown {
+  color: #fff !important;
+  font-weight: bold;
+  cursor: pointer;
+}

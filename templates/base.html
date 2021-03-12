@@ -46,23 +46,17 @@
           </li >
           {% if user.is_authenticated %}
 <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Admin panel
-        </a>
+        </div>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Singed in as {{user.username}}</a>
           <a class="dropdown-item" href="{% url 'new_blog' %}">Add new post</a>
           <a class="dropdown-item" href="#">Edit posts</a>
-          <a class="dropdown-item">Edit profile</a>
           <a class="dropdown-item" href="{% url 'new_categorie' %}">Add new categorie</a>
+              <a class="nav-link" href="{% url 'logout' %}">logout</a>
         </div>
       </li>
-          <li class="nav-item">
-            <p class="nav-link" href="#">username:{{user.username}}</p>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" href="{% url 'logout' %}">logout</a>
-            </li>
-
           {% endif %}
         </ul>
       </div>
