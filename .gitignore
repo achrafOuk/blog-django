@@ -1,4 +1,7 @@
 __pycache__
 .idea
+.idea/*
 .metals
 .vscode
+.vscode/*
+db.sqlite3
