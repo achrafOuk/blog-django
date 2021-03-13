@@ -29,11 +29,10 @@ class BlogList(ListView):
         context['posts'] = Posts.objects.all().order_by('-date_posted')   
         context['categories'] = Categories.objects.all()
         return context
-def about(request):
-    return render(request,"about.html")
-
-def contact(request):
-    return render(request,"contact.html")
+class About(BlogList):
+    template_name = "about.html"
+class Contact(BlogList):
+    template_name = "contact.html"
 def blog(request,post_id):
     post = Posts.objects.get(post_id=post_id)
     author = User.objects.get(id=int(post.author_id))
@@ -47,17 +46,18 @@ def search(request):
     #posts = Posts.objects.raw(f"select * from posts where title like '%{search_word}%'").order_by('-date_posted')   
     search_word = request.GET['fsearch']
     posts = Posts.objects.raw(f"SELECT * FROM `posts` WHERE title like '%%{search_word}%%'")
-    index = render_to_string('index.html', {"search_word":search_word,'title': 'APP', 'user': request.user,'posts':posts})
+    categories = Categories.objects.all()
+    index = render_to_string('index.html', {"categories":categories,"search_word":search_word,'title': 'APP', 'user': request.user,'posts':posts})
     return HttpResponse(index)
 
-class NewBlog(LoginRequiredMixin,CreateView):
+class NewBlog(BlogList,LoginRequiredMixin,CreateView):
     model=Posts
     fields = ['title', 'content', 'keywords', 'categorie']
     template_name ="manage/new_blog.html"
     def form_valid(self, form):
             form.instance.author = self.request.user
             return super().form_valid(form)
-class NewCategorie(LoginRequiredMixin,CreateView):
+class NewCategorie(BlogList,LoginRequiredMixin,CreateView):
     model=Categories
     fields = ['categorie_name']
     template_name ="manage/new_categorie.html"
