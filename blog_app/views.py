@@ -8,7 +8,7 @@ from django.views.generic import (
     CreateView,
     UpdateView,
     DeleteView,
-DetailView
+    DetailView
 )
 from django.http import HttpResponse
 from django.template.loader import render_to_string
@@ -23,6 +23,7 @@ def index(request):
     posts = Posts.objects.all().order_by('-date_posted')   
     index = render_to_string('index.html', {'title': 'APP', 'user': request.user,'posts':posts})
     return HttpResponse(index)
+# Blog CRUD classes
 class BlogList(ListView):
     model = Posts
     template_name = "index.html"
@@ -33,20 +34,41 @@ class BlogList(ListView):
         context['posts'] = Posts.objects.all().order_by('-date_posted')   
         context['categories'] = Categories.objects.all()
         return context
-class About(BlogList):
-    template_name = "about.html"
-class Contact(BlogList):
-    template_name = "contact.html"
-
 def blog(request,post_id):
     post = Posts.objects.get(post_id=post_id)
     author = User.objects.get(id=int(post.author_id))
     comments = Comments.objects.filter(post=int(post_id))
+    categories = Categories.objects.all()
     views_number = post.views+1
     Posts.objects.filter(post_id=post_id).update(views=views_number)
     post_title  = post.title
     blog = render_to_string('blog.html', {'comments':comments,'img':author.profile.image.url,'title': post_title,'author':str(author.username), 'user': request.user,'post':post})
     return HttpResponse(blog)
+class NewBlog(LoginRequiredMixin,CreateView):
+    model=Posts
+    fields = ['title', 'content', 'keywords', 'categorie']
+    template_name ="manage/new_blog.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['role'] = 'Create new blog'
+        return context
+class EditBlog(LoginRequiredMixin,UpdateView):
+    model = Posts
+    fields = ['title', 'content', 'keywords', 'categorie']
+    template_name = "manage/new_blog.html"
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['role'] = 'Edit blog'
+        return context
+
+class About(BlogList):
+    template_name = "about.html"
+class Contact(BlogList):
+    template_name = "contact.html"
+
 
 def search(request):
     #posts = Posts.objects.raw(f"select * from posts where title like '%{search_word}%'").order_by('-date_posted')   
@@ -56,13 +78,6 @@ def search(request):
     index = render_to_string('index.html', {"categories":categories,"search_word":search_word,'title': 'APP', 'user': request.user,'posts':posts})
     return HttpResponse(index)
 
-class NewBlog(BlogList,LoginRequiredMixin,CreateView):
-    model=Posts
-    fields = ['title', 'content', 'keywords', 'categorie']
-    template_name ="manage/new_blog.html"
-    def form_valid(self, form):
-            form.instance.author = self.request.user
-            return super().form_valid(form)
 class NewCategorie(BlogList,LoginRequiredMixin,CreateView):
     model=Categories
     fields = ['categorie_name']

@@ -27,7 +27,6 @@ class Categories(models.Model):
     class Meta:
             db_table = 'categorie'
     def get_absolute_url(self):
-        #return reverse("home", kwargs={"categorie_id": self.categorie_id})
         return reverse("home")
 
 class Posts(models.Model):
