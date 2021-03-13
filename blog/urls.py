@@ -19,7 +19,7 @@ from django.http import HttpResponse
 from blog_app import  views
 from django.contrib.auth import views as auth_views
 urlpatterns = [
-path('', views.index, name='home'),
+path('', views.BlogList.as_view(), name='home'),
 path('about/', views.about,name='about'),
 path('search', views.search,name='search'),
 path('post/<int:post_id>', views.blog,name='post'),
