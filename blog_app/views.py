@@ -38,13 +38,14 @@ def blog(request,post_id):
     post = Posts.objects.get(post_id=post_id)
     author = User.objects.get(id=int(post.author_id))
     comments = Comments.objects.filter(post=int(post_id))
-    categories = Categories.objects.all()
+    categories= Categories.objects.all()
     views_number = post.views+1
     Posts.objects.filter(post_id=post_id).update(views=views_number)
     post_title  = post.title
-    blog = render_to_string('blog.html', {'comments':comments,'img':author.profile.image.url,'title': post_title,'author':str(author.username), 'user': request.user,'post':post})
+    blog = render_to_string('blog.html', {'categories':categories,'comments':comments,'img':author.profile.image.url,'title': post_title,'author':str(author.username), 'user': request.user,'post':post})
     return HttpResponse(blog)
-class NewBlog(LoginRequiredMixin,CreateView):
+
+class NewBlog(LoginRequiredMixin,CreateView,BlogList):
     model=Posts
     fields = ['title', 'content', 'keywords', 'categorie']
     template_name ="manage/new_blog.html"
@@ -52,7 +53,7 @@ class NewBlog(LoginRequiredMixin,CreateView):
         context = super().get_context_data(**kwargs)
         context['role'] = 'Create new blog'
         return context
-class EditBlog(LoginRequiredMixin,UpdateView):
+class EditBlog(LoginRequiredMixin,UpdateView,BlogList):
     model = Posts
     fields = ['title', 'content', 'keywords', 'categorie']
     template_name = "manage/new_blog.html"
@@ -68,7 +69,6 @@ class About(BlogList):
     template_name = "about.html"
 class Contact(BlogList):
     template_name = "contact.html"
-
 
 def search(request):
     #posts = Posts.objects.raw(f"select * from posts where title like '%{search_word}%'").order_by('-date_posted')   
