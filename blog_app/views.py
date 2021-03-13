@@ -78,7 +78,7 @@ def search(request):
     index = render_to_string('index.html', {"categories":categories,"search_word":search_word,'title': 'APP', 'user': request.user,'posts':posts})
     return HttpResponse(index)
 
-class NewCategorie(LoginRequiredMixin,CreateView):
+class NewCategorie(LoginRequiredMixin,CreateView,BlogList):
     model=Categories
     fields = ['categorie_name']
     template_name ="manage/new_categorie.html"
