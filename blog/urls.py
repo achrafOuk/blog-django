@@ -26,7 +26,7 @@ path('post/<int:post_id>', views.blog,name='post'),
 path('post/new/', views.NewBlog.as_view(),name='new_blog'),
 path('categorie/new/', views.NewCategorie.as_view(),name='new_categorie'),
 path('contact/', views.Contact.as_view(),name='contact'),
- path('admin/', admin.site.urls,name='home'),
+path('admin/', admin.site.urls,name='home'),
 path('login/', auth_views.LoginView.as_view(template_name='author/login.html'), name='login'),
 path('logout/', auth_views.LogoutView.as_view(template_name='index.html'), name='logout'),
 ]

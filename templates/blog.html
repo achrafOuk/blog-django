@@ -16,7 +16,16 @@
       <div id="author-desc">random text about the author</div>
     </div>
   </div>
+  <legend>Comments</legend>
+  {% if not comments %}
   <div id="comments">0 comments</div>
+  <p>No comments</p>
+  {% else %} {% endif %} {% for comment in comments %}
+  <div class="comment">
+    {{ comment.user }} on {{comment.date_posted|date:"F d, Y" }}
+    <p>{{ comment.content }}</p>
+  </div>
+  {% endfor %}
 </article>
 <style>
   article.media.content-section {

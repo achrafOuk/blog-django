@@ -33,7 +33,6 @@ class Categories(models.Model):
 class Posts(models.Model):
     post_id = models.AutoField(primary_key=True)
     title=models.CharField(max_length=220,blank=False, null=False)
-    #image=models.ImageField(default='http://0.gravatar.com/avatar/3f009d72559f51e7e454b16e5d0687a1?s=96&d=mm&r=g', upload_to='profile_pics')
     content=RichTextField(blank=True, null=True)
     date_posted=models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -47,7 +46,10 @@ class Posts(models.Model):
 
 class Comments(models.Model):
     post = models.ForeignKey(Posts, on_delete=models.CASCADE , null=True)
+    user=models.CharField(max_length=220,blank=False, null=False,default="None")
+    email=models.CharField(max_length=220,blank=False, null=False,default="None")
     content=models.TextField(blank=True, null=True)
     date_posted=models.DateTimeField(default=timezone.now)
     class Meta:
             db_table = 'comments'
+    

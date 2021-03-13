@@ -3,10 +3,12 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.shortcuts import render
 from .models import Posts
+from .models import Comments
 from django.views.generic import (
     CreateView,
     UpdateView,
-    DeleteView
+    DeleteView,
+DetailView
 )
 from django.http import HttpResponse
 from django.template.loader import render_to_string
@@ -15,6 +17,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Categories
 from django.views.generic import ListView
+from django.contrib.auth import views as auth_views
+from django.shortcuts import get_object_or_404
 def index(request):
     posts = Posts.objects.all().order_by('-date_posted')   
     index = render_to_string('index.html', {'title': 'APP', 'user': request.user,'posts':posts})
@@ -33,13 +37,15 @@ class About(BlogList):
     template_name = "about.html"
 class Contact(BlogList):
     template_name = "contact.html"
+
 def blog(request,post_id):
     post = Posts.objects.get(post_id=post_id)
     author = User.objects.get(id=int(post.author_id))
+    comments = Comments.objects.filter(post=int(post_id))
     views_number = post.views+1
     Posts.objects.filter(post_id=post_id).update(views=views_number)
     post_title  = post.title
-    blog = render_to_string('blog.html', {'img':author.profile.image.url,'title': post_title,'author':str(author.username), 'user': request.user,'post':post})
+    blog = render_to_string('blog.html', {'comments':comments,'img':author.profile.image.url,'title': post_title,'author':str(author.username), 'user': request.user,'post':post})
     return HttpResponse(blog)
 
 def search(request):
