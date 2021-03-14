@@ -19,10 +19,6 @@ from .models import Categories
 from django.views.generic import ListView
 from django.contrib.auth import views as auth_views
 from django.shortcuts import get_object_or_404
-def index(request):
-    posts = Posts.objects.all().order_by('-date_posted')   
-    index = render_to_string('index.html', {'title': 'APP', 'user': request.user,'posts':posts})
-    return HttpResponse(index)
 # Blog CRUD classes
 class BlogList(ListView):
     model = Posts
@@ -34,16 +30,19 @@ class BlogList(ListView):
         context['posts'] = Posts.objects.all().order_by('-date_posted')   
         context['categories'] = Categories.objects.all()
         return context
-def blog(request,post_id):
-    post = Posts.objects.get(post_id=post_id)
-    author = User.objects.get(id=int(post.author_id))
-    comments = Comments.objects.filter(post=int(post_id))
-    categories= Categories.objects.all()
-    views_number = post.views+1
-    Posts.objects.filter(post_id=post_id).update(views=views_number)
-    post_title  = post.title
-    blog = render_to_string('blog.html', {'categories':categories,'comments':comments,'img':author.profile.image.url,'title': post_title,'author':str(author.username), 'user': request.user,'post':post})
-    return HttpResponse(blog)
+
+class blogView(DetailView):
+    model = Posts
+    template_name = 'blog.html'
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['post'] = Posts.objects.get(post_id=self.kwargs['pk'])
+        post_title  = context['post'].title
+        context['comments'] = Comments.objects.filter(post=context['post'].post_id)
+        context['categories']= Categories.objects.all()
+        context['author'] = User.objects.get(id=context['post'].author_id)
+        context['img']= context['author'].profile.image.url 
+        return context
 
 class NewBlog(LoginRequiredMixin,CreateView,BlogList):
     model=Posts

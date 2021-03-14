@@ -18,6 +18,7 @@
   </div>
   <legend>Comments</legend>
   <form action="POST" class="card py-2">
+    <legend>Leave a comment</legend>
     {% csrf_token %} Name:
     <input name="name" type="text" class="form-control" />
     Email:
@@ -64,8 +65,8 @@
     border-radius: 100%;
   }
   form.card.py-2 {
-    padding: 3%;
-    line-height: 3;
+    padding: 2%;
+    line-height: 2;
   }
   .comment {
     padding: 2%;
