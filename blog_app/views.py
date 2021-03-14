@@ -40,6 +40,8 @@ class blogView(DetailView):
         post_title  = context['post'].title
         context['comments'] = Comments.objects.filter(post=context['post'].post_id)
         context['categories']= Categories.objects.all()
+        views_number = context['post'].views+1
+        Posts.objects.filter(post_id=self.kwargs['pk']).update(views=views_number)
         context['author'] = User.objects.get(id=context['post'].author_id)
         context['img']= context['author'].profile.image.url 
         return context
