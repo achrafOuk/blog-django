@@ -45,6 +45,9 @@ class blogView(DetailView):
         context['author'] = User.objects.get(id=context['post'].author_id)
         context['img']= context['author'].profile.image.url 
         return context
+    def post(self,request,**kwargs):
+        blog = render_to_string('blog.html')
+        return HttpResponse(blog)
 
 class NewBlog(LoginRequiredMixin,CreateView,BlogList):
     model=Posts

@@ -17,7 +17,7 @@
     </div>
   </div>
   <legend>Comments</legend>
-  <form action="POST" class="card py-2">
+  <form method="POST" class="card py-2">
     <legend>Leave a comment</legend>
     {% csrf_token %} Name:
     <input name="name" type="text" class="form-control" />
