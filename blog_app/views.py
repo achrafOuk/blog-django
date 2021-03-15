@@ -19,6 +19,7 @@ from .models import Categories
 from django.views.generic import ListView
 from django.contrib.auth import views as auth_views
 from django.shortcuts import get_object_or_404
+from datetime import datetime
 # Blog CRUD classes
 class BlogList(ListView):
     model = Posts
@@ -49,6 +50,13 @@ class blogView(DetailView):
     def post(self,request,**kwargs):
         self.object = self.get_object()
         context = self.get_context_data(**kwargs)
+        post_id = context['post'].post_id
+        name = request.POST['name']
+        email = request.POST['email']
+        comment = request.POST['body']
+        date_posted = datetime.today().isoformat()
+        comment = Comments(post_id=post_id,user=name,email=email,content=comment,date_posted=date_posted)
+        comment.save()
         return self.render_to_response(context=context)
 class NewBlog(LoginRequiredMixin,CreateView,BlogList):
     model=Posts
