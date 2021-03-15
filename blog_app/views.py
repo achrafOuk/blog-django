@@ -44,11 +44,12 @@ class blogView(DetailView):
         Posts.objects.filter(post_id=self.kwargs['pk']).update(views=views_number)
         context['author'] = User.objects.get(id=context['post'].author_id)
         context['img']= context['author'].profile.image.url 
-        return context
+        self.context = context 
+        return self.context
     def post(self,request,**kwargs):
-        blog = render_to_string('blog.html')
-        return HttpResponse(blog)
-
+        self.object = self.get_object()
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context=context)
 class NewBlog(LoginRequiredMixin,CreateView,BlogList):
     model=Posts
     fields = ['title', 'content', 'keywords', 'categorie']
