@@ -44,7 +44,7 @@ class blogView(DetailView):
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
         context['post'] = Posts.objects.get(post_id=self.kwargs['pk'])
-        post_title  = context['post'].title
+        context['title']  = context['post'].title
         context['comments'] = Comments.objects.filter(post=context['post'].post_id)
         context['categories'] = Categories.objects.raw("""
         select categorie.categorie_id,count(*) as count,categorie.categorie_name as categorie from
@@ -55,8 +55,7 @@ class blogView(DetailView):
         Posts.objects.filter(post_id=self.kwargs['pk']).update(views=views_number)
         context['author'] = User.objects.get(id=context['post'].author_id)
         context['img']= context['author'].profile.image.url 
-        self.context = context 
-        return self.context
+        return context
     def post(self,request,**kwargs):
         self.object = self.get_object()
         context = self.get_context_data(**kwargs)
