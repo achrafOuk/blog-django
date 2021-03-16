@@ -20,11 +20,30 @@
   <form method="POST" class="card py-2">
     <legend>Leave a comment</legend>
     {% csrf_token %} Name:
-    <input name="name" type="text" class="form-control" />
+    <input
+      name="name"
+      type="text"
+      class="form-control"
+      required="required"
+      pattern="[A-Za-z]{1,}"
+      title="write a name"
+    />
     Email:
-    <input name="email" type="text" class="form-control" />
+    <input
+      name="email"
+      pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}"
+      type="email"
+      class="form-control"
+      required="required"
+    />
     Comment:
-    <textarea name="body" class="form-control"></textarea><br />
+    <textarea
+      name="body"
+      class="form-control"
+      title="entre a comment"
+      required="required"
+    ></textarea
+    ><br />
     <button class="btn btn-secondary" type="submit">submit</button>
   </form>
   {% if not comments %}
