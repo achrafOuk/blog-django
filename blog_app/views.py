@@ -31,7 +31,11 @@ class BlogList(ListView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        context['categories'] = Categories.objects.all()
+        context['categories'] = Categories.objects.raw("""
+        select categorie.categorie_id,count(*) as count,categorie.categorie_name as categorie from
+         posts join categorie on posts.categorie_id=categorie.categorie_id 
+         GROUP by `categorie_name`
+         """)
         return context
 
 class blogView(DetailView):
@@ -42,7 +46,11 @@ class blogView(DetailView):
         context['post'] = Posts.objects.get(post_id=self.kwargs['pk'])
         post_title  = context['post'].title
         context['comments'] = Comments.objects.filter(post=context['post'].post_id)
-        context['categories']= Categories.objects.all()
+        context['categories'] = Categories.objects.raw("""
+        select categorie.categorie_id,count(*) as count,categorie.categorie_name as categorie from
+         posts join categorie on posts.categorie_id=categorie.categorie_id 
+         GROUP by `categorie_name`
+         """)
         views_number = context['post'].views+1
         Posts.objects.filter(post_id=self.kwargs['pk']).update(views=views_number)
         context['author'] = User.objects.get(id=context['post'].author_id)

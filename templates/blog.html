@@ -28,8 +28,7 @@
     <button class="btn btn-secondary" type="submit">submit</button>
   </form>
   {% if not comments %}
-  <div id="comments">0 comments</div>
-  <p>No comments</p>
+  <legend>No comments</legend>
   {% else %} {% endif %} {% for comment in comments %}
   <div class="comment">
     <h5 class="h5 g-color-gray-dark-v1 mb-0">{{ comment.user }}</h5>
@@ -63,6 +62,9 @@
     width: 100px;
     height: 100px;
     border-radius: 100%;
+  }
+  legend {
+    margin-top: 2%;
   }
   form.card.py-2 {
     padding: 2%;
