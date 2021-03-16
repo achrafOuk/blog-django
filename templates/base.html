@@ -14,54 +14,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'style/forms.css' %}">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Navbar</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <div class="navbar-nav">
-      <a class="nav-item nav-link active" href="{% url 'home' %}">Home </a>
-    </div>
-  </div>
-</nav>
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container">
-      <a class="navbar-brand" href="#">Start Bootstrap</a>
-      <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="navbar-collapse collapse" id="navbarResponsive" style="">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="{% url 'home' %}">Home
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'about' %}">About</a>
-          </li>
-                    <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
-          </li >
-          {% if user.is_authenticated %}
-<li class="nav-item dropdown">
-        <div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Admin panel
-        </div>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Singed in as {{user.username}}</a>
-          <a class="dropdown-item" href="{% url 'new_blog' %}">Add new post</a>
-          <a class="dropdown-item" href="#">Edit posts</a>
-          <a class="dropdown-item" href="{% url 'new_categorie' %}">Add new categorie</a>
-          <a class="dropdown-item" href="{% url 'logout' %}">logout</a>
-        </div>
-      </li>
-          {% endif %}
-        </ul>
-      </div>
-    </div>
-  </nav>
+{% include "components/navbar.html" %}
 <main role="main" class="container">
 <div class="row">
 <div class="container col-md-8">
@@ -69,69 +22,11 @@
 
 {% endblock %}
 </div>
-      <!-- Sidebar Widgets Column -->
-      <div class="col-md-4">
-
-        <!-- Search Widget -->
-        <form action="search" method="GET" class="card my-4">
-          {% csrf_token %}
-          <h5 class="card-header">Search</h5>
-          <div class="card-body">
-            <div class="input-group">
-              <input name='fsearch' type="text" class="form-control" placeholder="Search for...">
-              <span class="input-group-append">
-                <button class="btn btn-secondary" type="submit">Go!</button>
-              </span>
-            </div>
-          </div>
-        </form>
-
-        <!-- Categories Widget -->
-        <div class="card my-4">
-          <h5 class="card-header">Categories</h5>
-          <div class="card-body">
-            <div class="row">
-          <div class="col-lg-6">
-                <ul class="list-unstyled mb-0">
-                  {% if categories %}
-                  {% for categorie in categories %}
-                  <li>
-                  <a href="#">{{categorie}}</a>
-                  </li>
-                  {% endfor %}
-                  {% endif %}
-                  </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Side Widget -->
-        <div class="card my-4">
-          <h5 class="card-header">Side Widget</h5>
-          <div class="card-body">
-            You can put anything you want inside of these side widgets. They are easy to use, and feature the new Bootstrap 4 card containers!
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-    <!-- /.row -->
-
-  </div>
-  <!-- /.container -->
-
-  
+     {% include "components/sidebar.html" %} 
 </main>
 <!-- Footer -->
-  <footer class="py-5 bg-dark">
-    <div class="container">
-      <p class="m-0 text-center text-white">Copyright &copy; Your Website 2020</p>
-    </div>
-    <!-- /.container -->
-  </footer>
-<script src="{% static 'javascript/menu.js' %}"></script>
+{% include "components/footer.html" %}
+  <script src="{% static 'javascript/menu.js' %}"></script>
 <script src="{% static 'javascript/form-style.js' %}"></script>
 {% block js %}
 {% endblock js%}

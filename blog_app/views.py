@@ -20,15 +20,17 @@ from django.views.generic import ListView
 from django.contrib.auth import views as auth_views
 from django.shortcuts import get_object_or_404
 from datetime import datetime
+from django.core.paginator import Paginator
 # Blog CRUD classes
 class BlogList(ListView):
     model = Posts
     template_name = "index.html"
+    ordering =['-date_posted']
+    context_object_name="posts"
+    paginate_by = 2
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
-        context['posts'] = Posts.objects.all().order_by('-date_posted')   
         context['categories'] = Categories.objects.all()
         return context
 
@@ -98,3 +100,4 @@ class NewCategorie(LoginRequiredMixin,CreateView,BlogList):
     def form_valid(self, form):
             form.instance.author = self.request.user
             return super().form_valid(form)
+
