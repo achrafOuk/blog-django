@@ -128,6 +128,7 @@ def postsByCateogire(request,cat):
          GROUP by `categorie_name`
          """)
     cat = cat.replace("-", " ")
+    print(request.get_full_path())
     categorie =Categories.objects.filter(categorie_name=cat).values_list("categorie_id")
     print(categorie[0][0])
     if categorie:
