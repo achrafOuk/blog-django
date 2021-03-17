@@ -1,0 +1,28 @@
+{% extends "base.html"%} {% block content %} {% load static %}
+<legend>{{categorie}} blogs</legend>
+<div class="row">
+  {%for post in categorie_posts%}
+  <!-- Blog Entries Column -->
+  <div class="col-md-12">
+    <!-- Blog Post -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h2 class="card-title">
+          <a href="{% url 'post' post.post_id %}">{{post.title}}</a>
+        </h2>
+        <div class="card-text">{{post.content|safe}}</div>
+        <a href="{% url 'post' post.post_id %}" class="btn btn-primary"
+          >Read More &rarr;</a
+        >
+      </div>
+      <div class="card-footer text-muted">
+        Posted on {{ post.date_posted |date:"F d, Y" }} by
+        <a href="#">{{post.author}}</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% include "components/pagination.html" %} {% endblock %} {% block js %}
+<script src="{% static 'javascript/shortText.js' %}"></script>
+{% endblock js%}

@@ -108,3 +108,17 @@ class NewCategorie(LoginRequiredMixin,CreateView,BlogList):
             form.instance.author = self.request.user
             return super().form_valid(form)
 
+def postsByCateogire(request,cat):
+    categories= Categories.objects.raw("""
+        select categorie.categorie_id,count(*) as count,categorie.categorie_name as categorie from
+         posts join categorie on posts.categorie_id=categorie.categorie_id 
+         GROUP by `categorie_name`
+         """)
+    cat = cat.replace("-", " ")
+    categorie =Categories.objects.filter(categorie_name=cat).values_list("categorie_id")
+    print(categorie[0][0])
+    if categorie:
+        categorie_id = categorie[0][0]
+        categorie_posts = Posts.objects.filter(categorie_id=categorie_id).order_by('-date_posted')
+        return render(request,"categorie_posts.html",{"categories":categories,"categorie":cat,"categorie_posts":categorie_posts})
+    return render(request,"categorie_posts.html")
