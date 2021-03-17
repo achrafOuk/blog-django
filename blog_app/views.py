@@ -20,7 +20,7 @@ from django.views.generic import ListView
 from django.contrib.auth import views as auth_views
 from django.shortcuts import get_object_or_404
 from datetime import datetime
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Blog CRUD classes
 class BlogList(ListView):
     model = Posts
@@ -94,9 +94,22 @@ class Contact(BlogList):
 
 def search(request):
     #posts = Posts.objects.raw(f"select * from posts where title like '%{search_word}%'").order_by('-date_posted')   
+    categories= Categories.objects.raw("""
+        select categorie.categorie_id,count(*) as count,categorie.categorie_name as categorie from
+         posts join categorie on posts.categorie_id=categorie.categorie_id 
+         GROUP by `categorie_name`
+         """)
     search_word = request.GET['fsearch']
     posts = Posts.objects.raw(f"SELECT * FROM `posts` WHERE title like '%%{search_word}%%'")
-    categories = Categories.objects.all()
+    posts = Posts.objects.filter(title__contains=search_word)
+    page = request.GET.get('page', 1)
+    paginator = Paginator(posts, 1)
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
     index = render_to_string('index.html', {"categories":categories,"search_word":search_word,'title': 'APP', 'user': request.user,'posts':posts})
     return HttpResponse(index)
 
@@ -120,5 +133,13 @@ def postsByCateogire(request,cat):
     if categorie:
         categorie_id = categorie[0][0]
         categorie_posts = Posts.objects.filter(categorie_id=categorie_id).order_by('-date_posted')
-        return render(request,"categorie_posts.html",{"categories":categories,"categorie":cat,"categorie_posts":categorie_posts})
+        page = request.GET.get('page', 1)
+        paginator = Paginator(categorie_posts, 1)
+        try:
+            posts = paginator.page(page)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
+        return render(request,"categorie_posts.html",{"categories":categories,"categorie":cat,"categorie_posts":posts})
     return render(request,"categorie_posts.html")
