@@ -1,0 +1,69 @@
+{% extends "base.html"%} {% block content %} {% load static %}
+<div class="row">
+  {%for post in posts%}
+  <!-- Blog Entries Column -->
+  <div class="col-md-12">
+    <!-- Blog Post -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h2 class="card-title">
+          <a href="{% url 'post' post.post_id %}">{{post.title}}</a>
+        </h2>
+        <div class="card-text">{{post.content|safe}}</div>
+        <a href="{% url 'post' post.post_id %}" class="btn btn-primary"
+          >Read More &rarr;</a
+        >
+      </div>
+      <div class="card-footer text-muted">
+        Posted on {{ post.date_posted |date:"F d, Y" }} by
+        <a href="#">{{post.author}}</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<nav id="pagination" aria-label="Page navigation example">
+  <ul class="pagination">
+    {% if posts.has_previous %}
+    <li class="page-item">
+      <a
+        class="page-link"
+        href="/search?fsearch={{search}}&page={{ posts.previous_page_number }}"
+        >Previous</a
+      >
+    </li>
+    {% endif %} {% for page_number in posts.paginator.page_range %}
+    <li class="page-item">
+      <a
+        class="page-link"
+        href="/search?fsearch={{search}}&page={{page_number}}"
+        >{{page_number}}</a
+      >
+    </li>
+    {% endfor %} {% if posts.has_next %}
+    <li class="page-item">
+      <a
+        class="page-link"
+        href="/search?fsearch={{search}}&page={{ posts.next_page_number }}"
+        >Next</a
+      >
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+<style>
+  #pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .page-link {
+    color: #343a40;
+    font-weight: bold;
+  }
+</style>
+
+{% endblock %} {% block js %}
+
+<script src="{% static 'javascript/shortText.js' %}"></script>
+{% endblock js%}

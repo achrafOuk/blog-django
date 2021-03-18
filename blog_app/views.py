@@ -102,6 +102,7 @@ def search(request):
     search_word = request.GET['fsearch']
     posts = Posts.objects.raw(f"SELECT * FROM `posts` WHERE title like '%%{search_word}%%'")
     posts = Posts.objects.filter(title__contains=search_word)
+    search_word = search_word.replace(" ","+")
     page = request.GET.get('page', 1)
     paginator = Paginator(posts, 1)
     try:
@@ -110,7 +111,7 @@ def search(request):
         posts = paginator.page(1)
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
-    index = render_to_string('index.html', {"categories":categories,"search_word":search_word,'title': 'APP', 'user': request.user,'posts':posts})
+    index = render_to_string('search.html', {"search":search_word,"categories":categories,"search_word":search_word,'title': 'APP', 'user': request.user,'posts':posts})
     return HttpResponse(index)
 
 class NewCategorie(LoginRequiredMixin,CreateView,BlogList):
