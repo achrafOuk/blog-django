@@ -22,11 +22,15 @@ urlpatterns = [
 path('', views.BlogList.as_view(), name='home'),
 path('about/', views.About.as_view(),name='about'),
 path('search', views.search,name='search'),
+# post CRUD
 path('post/<int:pk>', views.blogView.as_view(),name='post'),
-path('posts/<str:cat>', views.postsByCateogire,name='categorie'),
 path('post/new/', views.NewBlog.as_view(),name='new_blog'),
-path('post/<int:pk>/edit/', views.EditBlog.as_view(),name='edit_blog'),
-path('categorie/new/', views.NewCategorie.as_view(),name='new_categorie'),
+path('post/edit/<int:pk>', views.EditBlog.as_view(),name='edit_blog'),
+# Category CRUD
+path('category/<str:cat>', views.postsByCateogire,name='categorie'),
+path('category/new/', views.NewCategorie.as_view(),name='new_categorie'),
+path('category/edit/<int:pk>', views.EditCategories.as_view(),name='edit_category'),
+# others
 path('contact/', views.Contact.as_view(),name='contact'),
 path('admin/', admin.site.urls,name='home'),
 path('login/', auth_views.LoginView.as_view(template_name='author/login.html',redirect_authenticated_user=True), name='login'),

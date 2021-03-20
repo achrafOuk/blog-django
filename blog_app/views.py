@@ -86,14 +86,13 @@ class EditBlog(LoginRequiredMixin,UpdateView,BlogList):
         context = super().get_context_data(**kwargs)
         context['role'] = 'Edit blog'
         return context
-
+# End blog CRUD 
 class About(BlogList):
     template_name = "about.html"
 class Contact(BlogList):
     template_name = "contact.html"
 
 def search(request):
-    #posts = Posts.objects.raw(f"select * from posts where title like '%{search_word}%'").order_by('-date_posted')   
     categories= Categories.objects.raw("""
         select categorie.categorie_id,count(*) as count,categorie.categorie_name as categorie from
          posts join categorie on posts.categorie_id=categorie.categorie_id 
@@ -113,7 +112,7 @@ def search(request):
         posts = paginator.page(paginator.num_pages)
     index = render_to_string('search.html', {"search":search_word,"categories":categories,"search_word":search_word,'title': 'APP', 'user': request.user,'posts':posts})
     return HttpResponse(index)
-
+# categories CRUD
 class NewCategorie(LoginRequiredMixin,CreateView,BlogList):
     model=Categories
     fields = ['categorie_name']
@@ -121,7 +120,18 @@ class NewCategorie(LoginRequiredMixin,CreateView,BlogList):
     def form_valid(self, form):
             form.instance.author = self.request.user
             return super().form_valid(form)
-
+class EditCategories(LoginRequiredMixin,UpdateView,BlogList):
+    model = Categories
+    template_name = "manage/new_blog.html"
+    fields = ['categorie_name']
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['role'] = 'Edit category name'
+        return context
+# Categories CRUD ends
 def postsByCateogire(request,cat):
     categories= Categories.objects.raw("""
         select categorie.categorie_id,count(*) as count,categorie.categorie_name as categorie from
@@ -129,9 +139,7 @@ def postsByCateogire(request,cat):
          GROUP by `categorie_name`
          """)
     cat = cat.replace("-", " ")
-    print(request.get_full_path())
     categorie =Categories.objects.filter(categorie_name=cat).values_list("categorie_id")
-    print(categorie[0][0])
     if categorie:
         categorie_id = categorie[0][0]
         categorie_posts = Posts.objects.filter(categorie_id=categorie_id).order_by('-date_posted')
@@ -143,5 +151,6 @@ def postsByCateogire(request,cat):
             posts = paginator.page(1)
         except EmptyPage:
             posts = paginator.page(paginator.num_pages)
-        return render(request,"categorie_posts.html",{"categories":categories,"categorie":cat,"categorie_posts":posts})
+        data = {"title":cat,"categories":categories,"categorie":cat,"categorie_posts":posts}
+        return render(request,"categorie_posts.html",data)
     return render(request,"categorie_posts.html")
