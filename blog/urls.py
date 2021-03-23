@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,include
 from django.http import HttpResponse
 from blog_app import  views
 from django.contrib.auth import views as auth_views
@@ -30,6 +30,8 @@ path('post/edit/<int:pk>', views.EditBlog.as_view(),name='edit_blog'),
 path('category/<str:cat>', views.postsByCateogire,name='categorie'),
 path('category/new/', views.NewCategorie.as_view(),name='new_categorie'),
 path('category/edit/<int:pk>', views.EditCategories.as_view(),name='edit_category'),
+#admin panel
+path('admin/dashboard/', views.AdminDashboard.as_view(),name="dashboard"),
 # others
 path('contact/', views.Contact.as_view(),name='contact'),
 path('admin/', admin.site.urls,name='home'),

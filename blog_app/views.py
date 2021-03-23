@@ -5,6 +5,7 @@ from django.shortcuts import render
 from .models import Posts
 from .models import Comments
 from django.views.generic import (
+    TemplateView,
     CreateView,
     UpdateView,
     DeleteView,
@@ -22,6 +23,12 @@ from django.shortcuts import get_object_or_404
 from datetime import datetime
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Blog CRUD classes
+def get_categories():
+    return Categories.objects.raw("""
+        select categorie.categorie_id,count(*) as count,categorie.categorie_name as categorie from
+         posts join categorie on posts.categorie_id=categorie.categorie_id 
+         GROUP by `categorie_name`
+         """)
 class BlogList(ListView):
     model = Posts
     template_name = "index.html"
@@ -31,11 +38,7 @@ class BlogList(ListView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        context['categories'] = Categories.objects.raw("""
-        select categorie.categorie_id,count(*) as count,categorie.categorie_name as categorie from
-         posts join categorie on posts.categorie_id=categorie.categorie_id 
-         GROUP by `categorie_name`
-         """)
+        context['categories'] = get_categories()
         return context
 
 class blogView(DetailView):
@@ -46,11 +49,7 @@ class blogView(DetailView):
         context['post'] = Posts.objects.get(post_id=self.kwargs['pk'])
         context['title']  = context['post'].title
         context['comments'] = Comments.objects.filter(post=context['post'].post_id)
-        context['categories'] = Categories.objects.raw("""
-        select categorie.categorie_id,count(*) as count,categorie.categorie_name as categorie from
-         posts join categorie on posts.categorie_id=categorie.categorie_id 
-         GROUP by `categorie_name`
-         """)
+        context['categories'] = get_categories()
         views_number = context['post'].views+1
         Posts.objects.filter(post_id=self.kwargs['pk']).update(views=views_number)
         context['author'] = User.objects.get(id=context['post'].author_id)
@@ -84,6 +83,7 @@ class EditBlog(LoginRequiredMixin,UpdateView,BlogList):
         return super().form_valid(form)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['title'] = 'Edit blog'
         context['role'] = 'Edit blog'
         return context
 # End blog CRUD 
@@ -93,11 +93,7 @@ class Contact(BlogList):
     template_name = "contact.html"
 
 def search(request):
-    categories= Categories.objects.raw("""
-        select categorie.categorie_id,count(*) as count,categorie.categorie_name as categorie from
-         posts join categorie on posts.categorie_id=categorie.categorie_id 
-         GROUP by `categorie_name`
-         """)
+    categories= get_categories()
     search_word = request.GET['fsearch']
     posts = Posts.objects.raw(f"SELECT * FROM `posts` WHERE title like '%%{search_word}%%'")
     posts = Posts.objects.filter(title__contains=search_word)
@@ -133,11 +129,7 @@ class EditCategories(LoginRequiredMixin,UpdateView,BlogList):
         return context
 # Categories CRUD ends
 def postsByCateogire(request,cat):
-    categories= Categories.objects.raw("""
-        select categorie.categorie_id,count(*) as count,categorie.categorie_name as categorie from
-         posts join categorie on posts.categorie_id=categorie.categorie_id 
-         GROUP by `categorie_name`
-         """)
+    categories= get_categories()
     cat = cat.replace("-", " ")
     categorie =Categories.objects.filter(categorie_name=cat).values_list("categorie_id")
     if categorie:
@@ -154,3 +146,11 @@ def postsByCateogire(request,cat):
         data = {"title":cat,"categories":categories,"categorie":cat,"categorie_posts":posts}
         return render(request,"categorie_posts.html",data)
     return render(request,"categorie_posts.html")
+# admin 
+class AdminDashboard(LoginRequiredMixin,TemplateView):
+    template_name = "admin/profile.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['visit_count'] = 100
+        context['comments_count'] = 2
+        return context
